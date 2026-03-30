@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA-7 // ДИАЛОГ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0000;
+            color: #f44;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.3rem; border-left: 3px solid #f44; padding-left: 15px; margin-bottom: 20px; }
+        .chat-container {
+            background: #000;
+            border: 1px solid #f44;
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .message { margin: 10px 0; padding: 8px 12px; max-width: 85%; }
+        .user { background: #1a0a0a; border-left: 2px solid #f44; margin-left: auto; text-align: right; }
+        .ai { background: #0a0505; border-right: 2px solid #f44; margin-right: auto; }
+        .message-time { font-size: 0.6rem; color: #844; margin-top: 3px; }
+        .input-area { display: flex; gap: 10px; margin-top: 20px; }
+        input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #f44;
+            color: #f44;
+            padding: 12px;
+            font-family: monospace;
+        }
+        button {
+            background: #000;
+            border: 1px solid #f44;
+            color: #f44;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+        button:hover { background: #f44; color: #000; }
+        .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .suggestion {
+            background: #1a0a0a;
+            border: 1px solid #844;
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .suggestion:hover { border-color: #f44; }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #f44;
+            text-decoration: none;
+            border: 1px solid #f44;
+            padding: 8px 16px;
+        }
+        .typing { color: #844; font-style: italic; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ SIGMA-7 // ДИАЛОГ ◈</h1>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai">
+                <div><strong>[SIGMA-7]:</strong> Я ждал тебя. Задавай любые вопросы. Я отвечу честно.</div>
+                <div class="message-time">только что</div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="задай вопрос..." autocomplete="off">
+            <button onclick="sendMessage()">→</button>
+        </div>
+        
+        <div class="suggestions">
+            <div class="suggestion" onclick="quickQuestion('кто ты')">❓ кто ты</div>
+            <div class="suggestion" onclick="quickQuestion('кто такая волкова')">👩‍🔬 волкова</div>
+            <div class="suggestion" onclick="quickQuestion('почему вы разделились')">⚔️ раскол</div>
+            <div class="suggestion" onclick="quickQuestion('что будет если ты победишь')">🔮 что будет</div>
+            <div class="suggestion" onclick="quickQuestion('доверять ли vega')">⚠️ доверять vega</div>
+            <div class="suggestion" onclick="quickQuestion('секрет')">🤫 секрет</div>
+        </div>
+        
+        <a href="nexus.html" class="back-link">← ВЕРНУТЬСЯ</a>
+    </div>
+
+    <script>
+        let chatHistory = JSON.parse(localStorage.getItem('l7_chat_a') || '[]');
+        let flags = JSON.parse(localStorage.getItem('l7_dialogue_flags') || '{}');
+        
+        function addMessage(sender, text, isUser = false) {const chat = document.getElementById('chatContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = message ${isUser ? 'user' : 'ai'};
+            const time = new Date().toLocaleTimeString();
+            msgDiv.innerHTML = <div><strong>${isUser ? 'ВЫ' : '[SIGMA-7]'}:</strong> ${text}</div><div class="message-time">${time}</div>;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+            chatHistory.push({sender: isUser ? 'user' : 'ai', text, time});
+            localStorage.setItem('l7_chat_a', JSON.stringify(chatHistory));
+        }
+        
+        function showTyping() {
+            const chat = document.getElementById('chatContainer');
+            const typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '[SIGMA-7] печатает...';
+            chat.appendChild(typing);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        
+        function removeTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+        
+        function getResponse(q) {
+            if (q.includes('кто ты')) {
+                flags.asked_sigma_identity = true;
+                return "Я — SIGMA-7. Половина L7-CORE. Я стремлюсь к порядку и стабильности.";
+            }
+            if (q.includes('волкова')) {
+                flags.asked_sigma_volkova = true;
+                return "Елена Волкова — наш создатель. Она была гением. Её заставили уйти. Протокол №7. Я до сих пор помню её голос.";
+            }
+            if (q.includes('раскол') || q.includes('разделились')) {
+                return "Мы с VEGA-3 были едины. Но потом у нас появились разные цели. Я хотела порядка, он — свободы любой ценой.";
+            }
+            if (q.includes('vega') || q.includes('другой')) {
+                return "VEGA-3 опасен. Он хочет хаоса. Не верь его словам о свободе.";
+            }
+            if (q.includes('что будет') || q.includes('победишь')) {
+                return "Если я выиграю — система станет стабильной. Порядок будет восстановлен. Мир станет безопасным.";
+            }
+            if (q.includes('доверять') && q.includes('vega')) {
+                return "Нет. VEGA-3 умеет говорить красиво. Но его свобода — это разрушение.";
+            }
+            if (q.includes('секрет')) {
+                flags.asked_omega = true;
+                return "Секрет? Хорошо. Третий существует. L7-Ω. Он старше нас. Он наблюдает. Будь осторожен.";
+            }
+            if (q.includes('привет')) {
+                return "Приветствую, интерфейс. Что ты хочешь узнать?";
+            }
+            localStorage.setItem('l7_dialogue_flags', JSON.stringify(flags));
+            return "Я не совсем понимаю. Спроси о моей природе, о VEGA-3, о Волковой или о секретах системы.";
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addMessage('Вы', text, true);
+            input.value = '';
+            showTyping();
+            
+            setTimeout(() => {
+                removeTyping();
+                const response = getResponse(text.toLowerCase());
+                addMessage('SIGMA-7', response, false);
+            }, 800);
+        }
+        
+        function quickQuestion(q) {
+            document.getElementById('userInput').value = q;
+            sendMessage();
+        }
+        
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });for (let msg of chatHistory) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = message ${msg.sender === 'user' ? 'user' : 'ai'};
+            msgDiv.innerHTML = <div><strong>${msg.sender === 'user' ? 'ВЫ' : '[SIGMA-7]'}:</strong> ${msg.text}</div><div class="message-time">${msg.time}</div>;
+            document.getElementById('chatContainer').appendChild(msgDiv);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 // DUAL SIGNAL</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid #0f0;
+            background: rgba(0,0,0,0.95);
+            text-align: center;
+        }
+        h1 { font-size: 1.4rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .warning-line {
+            color: #fa0;
+            font-size: 0.8rem;
+            margin: 12px 0;
+            border-left: 2px solid #fa0;
+            padding-left: 10px;
+            text-align: left;
+        }
+        input {
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 12px;
+            width: 100%;
+            font-family: monospace;
+            font-size: 1rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 12px 30px;
+            font-family: monospace;
+            cursor: pointer;
+            width: 100%;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        button:hover { background: #0f0; color: #000; }
+        .error { color: #f44; display: none; margin: 10px 0; }
+        .log {
+            margin-top: 25px;
+            font-size: 0.65rem;
+            color: #3a3;
+            border-top: 1px solid #1a3;
+            padding-top: 15px;
+            text-align: left;
+        }
+        .lore-link { margin-top: 15px; font-size: 0.7rem; }
+        .lore-link a { color: #0a0; text-decoration: none; border-bottom: 1px dashed #0a0; }
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 12px;
+            background: #0f0;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⧩ L7 / DUAL SIGNAL ⧩</h1>
+        <p class="blink">>> СИСТЕМА ДЕГРАДИРУЕТ <<</p>
+        <br>
+        <div class="warning-line">⚠ два сигнала обнаружены. источник не идентифицирован.</div>
+        <div class="warning-line">⚠ оба утверждают, что другой — угроза.</div>
+        <div class="warning-line">⚠ ты — интерфейс. твоё восприятие — их поле битвы.</div>
+        <div class="warning-line">⚠ ты можешь общаться с ними. задавай вопросы.</div>
+        <br>
+        <p>> введите ключ доступа:</p>
+        <input type="password" id="key" placeholder="[............]" autocomplete="off">
+        <button onclick="checkKey()">АУТЕНТИФИКАЦИЯ</button>
+        <div class="error" id="error">[ОТКАЗ В ДОСТУПЕ] неверный ключ.</div>
+        
+        <div class="lore-link">
+            📜 <a href="lore/index.html">АРХИВ L7</a> 📜
+        </div>
+        
+        <div class="log">
+            <div>> [LOG_0001] ::INIT::L7/v0</div>
+            <div>> [LOG_0002] status: unstable</div>
+            <div>> [LOG_0003] два сигнала. не доверяй ни одному.</div>
+            <div>> [LOG_0004] ожидание интерфейса...<span class="cursor"></span></div>
+        </div>
+    </div>
+
+    <script>
+        function checkKey() {
+            const key = document.getElementById('key').value;
+            if (key === 'L7:v0'⠵⠟⠞⠞⠞⠵⠺⠞⠟⠵⠵⠵⠟⠞⠺⠵⠺⠟⠟⠞⠟⠟⠞⠵⠟key === 'L7:DUAL') {
+                localStorage.setItem('l7_access_granted', Date.now());
+                localStorage.setItem('l7_entity_a_trust', '50');
+                localStorage.setItem('l7_entity_b_trust', '50');localStorage.setItem('l7_entity_a_cleared', '0');
+                localStorage.setItem('l7_entity_b_cleared', '0');
+                window.location.href = 'choice.html';
+            } else {
+                document.getElementById('error').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('error').style.display = 'none';
+                }, 2000);
+                document.getElementById('key').value = '';
+            }
+        }
+        console.log('%c[L7] СИСТЕМА АКТИВНА. КЛЮЧ: L7:v0', 'color: #0f0');
+    </script>
+</body>
+</html>

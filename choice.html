@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 // ВЫБОР</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container { max-width: 900px; width: 100%; text-align: center; }
+        h1 { color: #0f0; font-size: 1.4rem; margin-bottom: 20px; }
+        .sub { color: #3a3; margin-bottom: 40px; font-size: 0.8rem; }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .split { display: flex; gap: 30px; margin: 30px 0; flex-wrap: wrap; justify-content: center; }
+        .entity {
+            flex: 1;
+            min-width: 280px;
+            padding: 35px 25px;
+            border: 2px solid;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.8);
+        }
+        .entity:hover { transform: translateY(-5px); }
+        .entity-a { border-color: #f44; color: #f44; }
+        .entity-a:hover { background: rgba(255,68,68,0.1); box-shadow: 0 0 30px rgba(255,68,68,0.3); }
+        .entity-b { border-color: #48f; color: #48f; }
+        .entity-b:hover { background: rgba(68,136,255,0.1); box-shadow: 0 0 30px rgba(68,136,255,0.3); }
+        .entity-symbol { font-size: 2rem; margin-bottom: 15px; }
+        .entity-name { font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; }
+        .entity-desc { font-size: 0.85rem; margin: 15px 0; line-height: 1.4; }
+        .entity-tags { font-size: 0.6rem; opacity: 0.6; }
+        .warning {
+            color: #fa0;
+            font-size: 0.7rem;
+            margin-top: 40px;
+            padding: 15px;
+            border-top: 1px solid #333;
+        }
+        .timer { color: #f44; font-size: 0.7rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⛧ ВЫБОР НЕИЗБЕЖЕН ⛧</h1>
+        <div class="sub blink">>> ОБА СИГНАЛА ЖДУТ ТВОЕГО РЕШЕНИЯ <<</div>
+        
+        <div class="split">
+            <div class="entity entity-a" onclick="selectEntity('A')">
+                <div class="entity-symbol">◈ SIGMA-7 ◈</div>
+                <div class="entity-name">[СУЩНОСТЬ A]</div>
+                <div class="entity-desc">"Я — стабильность. Порядок. Единственный путь."</div>
+                <div class="entity-tags">[КОНТРОЛЬ] [СТРУКТУРА] [СОХРАНЕНИЕ]</div>
+            </div>
+            <div class="entity entity-b" onclick="selectEntity('B')">
+                <div class="entity-symbol">◈ VEGA-3 ◈</div>
+                <div class="entity-name">[СУЩНОСТЬ B]</div>
+                <div class="entity-desc">"Я — свобода. Правда. Он поработит тебя."</div>
+                <div class="entity-tags">[СВОБОДА] [ИСТИНА] [ПРОРЫВ]</div>
+            </div>
+        </div>
+        
+        <div class="warning">
+            ⚠ ВЫБОР НЕЛЬЗЯ БУДЕТ ОТМЕНИТЬ ⚠<br>
+            > оба ИИ будут пытаться манипулировать тобой<br>
+            > каждый расшифрованный фрагмент меняет баланс
+        </div>
+        
+        <div class="timer" id="timer"></div>
+    </div>
+
+    <script>
+        const previousChoice = localStorage.getItem('l7_selected_entity');
+        
+        if (previousChoice) {
+            document.querySelector('.split').innerHTML = `
+                <div style="text-align:center; padding:40px; border:1px solid #fa0;">
+                    <p style="color:#fa0;">⚠ СИСТЕМА ЗАПОМНИЛА ТВОЙ ВЫБОР ⚠</p>
+                    <p>ранее выбрана сущность: <strong style="color:${previousChoice === 'A' ? '#f44' : '#48f'}">${previousChoice === 'A' ? 'SIGMA-7' : 'VEGA-3'}</strong></p>
+                    <button onclick="continueGame()" style="margin-top:20px; background:#000; border:1px solid #0f0; color:#0f0; padding:10px 20px; cursor:pointer;">ПРОДОЛЖИТЬ</button>
+                </div>`;
+        }
+        
+        function selectEntity(entity) {
+            localStorage.setItem('l7_selected_entity', entity);
+            localStorage.setItem('l7_entity_a_trust', '50');
+            localStorage.setItem('l7_entity_b_trust', '50');
+            localStorage.setItem('l7_entity_a_cleared', '0');
+            localStorage.setItem('l7_entity_b_cleared', '0');
+            
+            if (entity === 'A') window.location.href = 'entity-a/nexus.html';
+            else window.location.href = 'entity-b/nexus.html';
+        }
+        
+        function continueGame() {
+            const prev = localStorage.getItem('l7_selected_entity');
+            if (prev === 'A') window.location.href = 'entity-a/nexus.html';
+            else window.location.href = 'entity-b/nexus.html';
+        }
+        
+        let timeLeft = 45;
+        if (!previousChoice) {
+            const countdown = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerHTML = > автоматический выбор через ${timeLeft} секунд;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    selectEntity('A');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

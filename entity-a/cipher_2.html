@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ФРАГМЕНТ 02</title>
+    <style>
+        body { background: #0a0000; color: #f44; font-family: monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { max-width: 500px; text-align: center; border: 2px solid #f44; padding: 40px; }
+        input { background: #000; border: 1px solid #f44; color: #f44; padding: 10px; width: 100%; margin: 20px 0; }
+        button { background: #000; border: 1px solid #f44; color: #f44; padding: 10px 20px; cursor: pointer; }
+        .hint { color: #fa0; font-size: 0.8rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 ФРАГМЕНТ 02</h1>
+        <div style="background:#1a0505; padding:20px; margin:20px 0;">uggcf://y7-abqr.arg/fvtz-n</div>
+        <input type="text" id="answer" placeholder="ответ...">
+        <button onclick="check()">ПРОВЕРИТЬ</button>
+        <div class="hint">💡 Подсказка: ROT13 → последнее слово</div>
+    </div>
+    <script>
+        function check() {
+            if (document.getElementById('answer').value.toLowerCase().trim() === 'sigm-a') {
+                let trust = parseInt(localStorage.getItem('l7_entity_a_trust') || 50);
+                let cleared = parseInt(localStorage.getItem('l7_entity_a_cleared') || 0);
+                localStorage.setItem('l7_entity_a_trust', trust + 20);
+                localStorage.setItem('l7_entity_a_cleared', cleared + 1);
+                alert('✅ ПРАВИЛЬНО!');
+                window.location.href = 'nexus.html';
+            } else alert('❌ НЕПРАВИЛЬНО');
+        }
+    </script>
+</body>
+</html>

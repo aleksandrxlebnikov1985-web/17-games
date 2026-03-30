@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEGA-3 // ФРАГМЕНТ 03</title>
+    <style>
+        body {
+            background: #001020;
+            color: #48f;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #48f;
+            padding: 40px;
+            background: #000;
+        }
+        .cipher-text {
+            background: #102030;
+            padding: 30px;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+        }
+        input {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px;
+            width: 100%;
+            font-family: monospace;
+            font-size: 1rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px 25px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background: #48f; color: #000; }
+        .hint {
+            color: #8af;
+            font-size: 0.8rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 ФРАГМЕНТ 03</h1>
+        <p>Расшифруй слово:</p>
+        <div class="cipher-text">H E L L O</div>
+        <input type="text" id="answer" placeholder="введите слово..." autocomplete="off">
+        <button onclick="checkAnswer()">ПРОВЕРИТЬ</button>
+        <div class="hint">💡 Подсказка: ....... </div>
+        <div id="error" style="color:#f88; margin-top:10px;"></div>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            const answer = document.getElementById('answer').value.toLowerCase().trim();
+            if (answer === 'hello' || answer === 'привет') {
+                let trust = parseInt(localStorage.getItem('l7_entity_b_trust') || 50);
+                let cleared = parseInt(localStorage.getItem('l7_entity_b_cleared') || 0);
+                trust += 25;
+                cleared += 1;
+                localStorage.setItem('l7_entity_b_trust', trust);
+                localStorage.setItem('l7_entity_b_cleared', cleared);
+                alert('✅ ПРАВИЛЬНО! +25 доверия к VEGA-3');
+                window.location.href = 'nexus.html';
+            } else {
+                document.getElementById('error').innerHTML = '❌ НЕПРАВИЛЬНО. Подсказка: это слово, которое говорят при встрече.';
+            }
+        }
+    </script>
+</body>
+</html>

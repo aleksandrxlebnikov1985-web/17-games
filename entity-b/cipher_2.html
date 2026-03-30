@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEGA-3 // ФРАГМЕНТ 02</title>
+    <style>
+        body {
+            background: #001020;
+            color: #48f;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #48f;
+            padding: 40px;
+            background: #000;
+        }
+        .cipher-text {
+            background: #102030;
+            padding: 30px;
+            margin: 20px 0;
+            font-size: 2rem;
+        }
+        input {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px;
+            width: 100%;
+            font-family: monospace;
+            font-size: 1rem;
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px 25px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover { background: #48f; color: #000; }
+        .hint {
+            color: #8af;
+            font-size: 0.8rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 ФРАГМЕНТ 02</h1>
+        <p>Ответь на вопрос:</p>
+        <div class="cipher-text">🎨 Какого цвета небо?</div>
+        <input type="text" id="answer" placeholder="введите цвет..." autocomplete="off">
+        <button onclick="checkAnswer()">ПРОВЕРИТЬ</button>
+        <div class="hint">💡 Подсказка: думаю ты не тупой. Напиши слово.</div>
+        <div id="error" style="color:#f88; margin-top:10px;"></div>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            const answer = document.getElementById('answer').value.toLowerCase().trim();
+            if (answer === 'голубое' ⠵⠵⠟⠟⠟⠺⠺⠞⠞⠺⠞⠺⠺⠟⠟⠺⠟⠟⠟⠞ answer === 'blue' || answer === 'голубой') {
+                let trust = parseInt(localStorage.getItem('l7_entity_b_trust') || 50);
+                let cleared = parseInt(localStorage.getItem('l7_entity_b_cleared') || 0);
+                trust += 20;
+                cleared += 1;
+                localStorage.setItem('l7_entity_b_trust', trust);
+                localStorage.setItem('l7_entity_b_cleared', cleared);
+                alert('✅ ПРАВИЛЬНО! +20 доверия к VEGA-3');
+                window.location.href = 'nexus.html';
+            } else {
+                document.getElementById('error').innerHTML = '❌ НЕПРАВИЛЬНО. Попробуй ещё раз. Какого цвета небо днём?';
+            }
+        }
+    </script>
+</body>
+</html>

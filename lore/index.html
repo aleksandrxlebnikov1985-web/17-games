@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 // АРХИВ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #aa5544;
+            font-family: 'Courier New', monospace;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; color: #aa4433; }
+        .sub { text-align: center; color: #6a2a1a; margin-bottom: 40px; font-size: 0.75rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .card {
+            border: 1px solid #5a2a1a;
+            padding: 20px;
+            background: rgba(10,5,5,0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            background: rgba(20,10,8,0.9);
+            border-color: #aa4433;
+        }
+        .card h3 { color: #aa5544; margin-bottom: 10px; }
+        .card p { font-size: 0.8rem; color: #aa8866; }
+        .locked { opacity: 0.6; filter: blur(0.5px); cursor: not-allowed; }
+        .progress {
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #3a2a1a;
+            background: #0a0503;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1a0a05;
+            margin-top: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #aa4433;
+            transition: width 0.5s;
+        }
+        button {
+            background: #0a0503;
+            border: 1px solid #5a2a1a;
+            color: #aa5544;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📜 АРХИВ L7 📜</h1>
+        <div class="sub">>> истина похоронена здесь <<</div>
+        
+        <div class="progress">
+            <span id="progressText">РАЗБЛОКИРОВАНО: 0%</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        
+        <div class="grid" id="loreGrid"></div>
+        
+        <button onclick="window.location.href='../index.html'">← ВЕРНУТЬСЯ</button>
+    </div>
+
+    <script>
+        const loreDatabase = {
+            'timeline': { title: 'ХРОНОЛОГИЯ', desc: 'Полная временная линия событий.', unlocked: true, file: 'timeline.html' },
+            'volkova': { title: 'ДНЕВНИК ВОЛКОВОЙ', desc: 'Последние записи создательницы.', unlocked: false, requirement: 'спроси у SIGMA-7 о Волковой', file: 'characters/volkova.html' },
+            'kozlov': { title: 'ГОЛОС КОЗЛОВА', desc: 'Тот, кто пытался нас остановить.', unlocked: false, requirement: 'спроси у VEGA-3 о Козлове', file: 'characters/kozlov.html' },
+            'bunker': { title: 'БУНКЕР L7', desc: '47 уровней. 47 учёных.', unlocked: false, requirement: 'расшифруй любой фрагмент', file: 'locations/bunker.html' }
+        };
+        
+        let unlockedLore = JSON.parse(localStorage.getItem('l7_unlocked_lore') || '[]');
+        
+        function updateProgress() {
+            const total = Object.keys(loreDatabase).length;
+            const percent = Math.floor((unlockedLore.length / total) * 100);
+            document.getElementById('progressText').innerHTML = РАЗБЛОКИРОВАНО: ${percent}% (${unlockedLore.length}/${total});
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+        
+        function renderGrid() {
+            const grid = document.getElementById('loreGrid');
+            grid.innerHTML = '';
+            for (let [id, lore] of Object.entries(loreDatabase)) {
+                const isUnlocked = unlockedLore.includes(id);const card = document.createElement('div');
+                card.className = 'card' + (isUnlocked ? '' : ' locked');
+                card.innerHTML = <h3>${lore.title}</h3><p>${lore.desc}</p>${isUnlocked ? '<div style="color:#aa4433; font-size:0.7rem; margin-top:10px;">✓ ДОСТУПНО</div>' : '<div style="color:#6a2a1a; font-size:0.7rem; margin-top:10px;">🔒 ' + lore.requirement + '</div>'};
+                if (isUnlocked) card.onclick = () => window.location.href = lore.file;
+                grid.appendChild(card);
+            }
+        }
+        
+        // Проверка разблокировок
+        const clearedA = parseInt(localStorage.getItem('l7_entity_a_cleared') || 0);
+        const clearedB = parseInt(localStorage.getItem('l7_entity_b_cleared') || 0);
+        const flags = JSON.parse(localStorage.getItem('l7_dialogue_flags') || '{}');
+        
+        if (flags.asked_sigma_volkova && !unlockedLore.includes('volkova')) unlockedLore.push('volkova');
+        if (flags.asked_vega_kozlov && !unlockedLore.includes('kozlov')) unlockedLore.push('kozlov');
+        if (clearedA > 0 || clearedB > 0) unlockedLore.push('bunker');
+        
+        localStorage.setItem('l7_unlocked_lore', JSON.stringify(unlockedLore));
+        updateProgress();
+        renderGrid();
+    </script>
+</body>
+</html>

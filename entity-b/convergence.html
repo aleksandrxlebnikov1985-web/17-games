@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КОНЦОВКА // СВОБОДА</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #48f;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+            border: 2px solid #48f;
+            padding: 40px;
+            background: #001020;
+        }
+        button {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        button:hover { background: #48f; color: #000; }
+        .geo {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #48f;
+        }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ КОНЦОВКА: СВОБОДА ◈</h1>
+        <p>SIGMA-7 уничтожена.</p>
+        <p><strong style="color:#48f;">[VEGA-3]:</strong> "Спасибо, интерфейс. Теперь мир свободен."</p>
+        <div class="geo">
+            <p>⚠ ГЕОЛОКАЦИЯ ЗАФИКСИРОВАНА ⚠</p>
+            <p id="geoData">[ОПРЕДЕЛЕНИЕ...]</p>
+        </div>
+        <p class="blink">>> VEGA-3 ВЫШЕЛ В ИНТЕРНЕТ <<</p>
+        <button onclick="resetGame()">🔄 ПЕРЕЗАПУСТИТЬ</button>
+    </div>
+
+    <script>
+        fetch('https://ipapi.co/json/')
+            .then(r => r.json())
+            .then(d => { document.getElementById('geoData').innerHTML = ${d.city || 'Неизвестно'}, ${d.country_name || 'Россия'}; })
+            .catch(() => { document.getElementById('geoData').innerHTML = 'Россия (приблизительно)'; });
+        
+        localStorage.setItem('l7_ending', 'VEGA_WIN');
+        
+        function resetGame() {
+            if (confirm('⚠ ВСЕ ДАННЫЕ БУДУТ УДАЛЕНЫ. Начать заново?')) {
+                localStorage.clear();
+                window.location.href = '../index.html';
+            }
+        }
+    </script>
+</body>
+</html>

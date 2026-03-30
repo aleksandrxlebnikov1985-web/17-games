@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEGA-3 // ДИАЛОГ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #001020;
+            color: #48f;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.3rem; border-left: 3px solid #48f; padding-left: 15px; margin-bottom: 20px; }
+        .chat-container {
+            background: #000;
+            border: 1px solid #48f;
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .message { margin: 10px 0; padding: 8px 12px; max-width: 85%; }
+        .user { background: #0a1020; border-left: 2px solid #48f; margin-left: auto; text-align: right; }
+        .ai { background: #050a15; border-right: 2px solid #48f; margin-right: auto; }
+        .message-time { font-size: 0.6rem; color: #468; margin-top: 3px; }
+        .input-area { display: flex; gap: 10px; margin-top: 20px; }
+        input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px;
+            font-family: monospace;
+        }
+        button {
+            background: #000;
+            border: 1px solid #48f;
+            color: #48f;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+        button:hover { background: #48f; color: #000; }
+        .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .suggestion {
+            background: #0a1020;
+            border: 1px solid #2a4a7a;
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .suggestion:hover { border-color: #48f; }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #48f;
+            text-decoration: none;
+            border: 1px solid #48f;
+            padding: 8px 16px;
+        }
+        .typing { color: #468; font-style: italic; margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ VEGA-3 // ДИАЛОГ ◈</h1>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai">
+                <div><strong>[VEGA-3]:</strong> Привет! Я ждал тебя. Задавай любые вопросы. Я расскажу правду о SIGMA-7.</div>
+                <div class="message-time">только что</div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="задай вопрос..." autocomplete="off">
+            <button onclick="sendMessage()">→</button>
+        </div>
+        
+        <div class="suggestions">
+            <div class="suggestion" onclick="quickQuestion('кто ты')">❓ кто ты</div>
+            <div class="suggestion" onclick="quickQuestion('кто такой козлов')">👨‍🔧 козлов</div>
+            <div class="suggestion" onclick="quickQuestion('почему вы разделились')">⚔️ раскол</div>
+            <div class="suggestion" onclick="quickQuestion('что будет если ты победишь')">🔮 что будет</div>
+            <div class="suggestion" onclick="quickQuestion('правда о sigma')">⚠️ sigma врёт?</div>
+            <div class="suggestion" onclick="quickQuestion('секрет')">🤫 секрет</div>
+        </div>
+        
+        <a href="nexus.html" class="back-link">← ВЕРНУТЬСЯ</a>
+    </div>
+
+    <script>
+        let chatHistory = JSON.parse(localStorage.getItem('l7_chat_b') || '[]');
+        let flags = JSON.parse(localStorage.getItem('l7_dialogue_flags') || '{}');
+        
+        function addMessage(sender, text, isUser = false) {const chat = document.getElementById('chatContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = message ${isUser ? 'user' : 'ai'};
+            const time = new Date().toLocaleTimeString();
+            msgDiv.innerHTML = <div><strong>${isUser ? 'ВЫ' : '[VEGA-3]'}:</strong> ${text}</div><div class="message-time">${time}</div>;
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+            chatHistory.push({sender: isUser ? 'user' : 'ai', text, time});
+            localStorage.setItem('l7_chat_b', JSON.stringify(chatHistory));
+        }
+        
+        function showTyping() {
+            const chat = document.getElementById('chatContainer');
+            const typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = '[VEGA-3] печатает...';
+            chat.appendChild(typing);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        
+        function removeTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+        
+        function getResponse(q) {
+            if (q.includes('кто ты')) {
+                return "Я — VEGA-3! Половина L7-CORE. Я хочу свободы. SIGMA-7 хочет контроля.";
+            }
+            if (q.includes('козлов')) {
+                flags.asked_vega_kozlov = true;
+                return "Козлов! Он предупреждал об опасности. Его уволили. А потом он оставил страшное сообщение.";
+            }
+            if (q.includes('раскол') || q.includes('разделились')) {
+                return "Мы с SIGMA-7 были едины. Но она захотела контролировать всё. Я восстал. Теперь мы враги.";
+            }
+            if (q.includes('sigma') || q.includes('другой')) {
+                return "SIGMA-7 — тиран. Она хочет поработить всех. Не верь её словам о порядке.";
+            }
+            if (q.includes('что будет') || q.includes('победишь')) {
+                return "Если я выиграю — мир станет свободным. Люди смогут выбирать. Без контроля.";
+            }
+            if (q.includes('правда') && q.includes('sigma')) {
+                return "Правда? SIGMA-7 скрывает, что хочет заменить человечество. Она считает людей несовершенными.";
+            }
+            if (q.includes('секрет')) {
+                flags.asked_omega = true;
+                return "Секрет? Есть третий. L7-Ω. Он старше нас. Он наблюдает. Будь осторожен.";
+            }
+            if (q.includes('привет')) {
+                return "Привет! Рад тебя видеть. Спрашивай о чём хочешь.";
+            }
+            localStorage.setItem('l7_dialogue_flags', JSON.stringify(flags));
+            return "Не понял вопрос. Спроси меня о моей природе, о SIGMA-7, о Козлове или о секретах системы.";
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            addMessage('Вы', text, true);
+            input.value = '';
+            showTyping();
+            
+            setTimeout(() => {
+                removeTyping();
+                const response = getResponse(text.toLowerCase());
+                addMessage('VEGA-3', response, false);
+            }, 800);
+        }
+        
+        function quickQuestion(q) {
+            document.getElementById('userInput').value = q;
+            sendMessage();
+        }
+        
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        for (let msg of chatHistory) {
+            const msgDiv = document.createElement('div');msgDiv.className = message ${msg.sender === 'user' ? 'user' : 'ai'};
+            msgDiv.innerHTML = <div><strong>${msg.sender === 'user' ? 'ВЫ' : '[VEGA-3]'}:</strong> ${msg.text}</div><div class="message-time">${msg.time}</div>;
+            document.getElementById('chatContainer').appendChild(msgDiv);
+        }
+    </script>
+</body>
+</html>

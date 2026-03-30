@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 // ХРОНОЛОГИЯ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #aa5544;
+            font-family: 'Courier New', monospace;
+            padding: 40px 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 30px; color: #aa4433; }
+        .timeline { position: relative; padding-left: 30px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #aa4433;
+        }
+        .event {
+            margin: 30px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        .event::before {
+            content: '●';
+            position: absolute;
+            left: -20px;
+            top: 0;
+            color: #aa4433;
+        }
+        .year { color: #aa6644; font-weight: bold; }
+        .title { color: #cc8866; margin: 5px 0; }
+        .desc { color: #aa8866; font-size: 0.8rem; }
+        button {
+            background: #0a0503;
+            border: 1px solid #5a2a1a;
+            color: #aa5544;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 ХРОНОЛОГИЯ КАТАСТРОФЫ</h1>
+        
+        <div class="timeline">
+            <div class="event">
+                <div class="year">2018 • МАРТ</div>
+                <div class="title">ОСНОВАНИЕ L7 DYNAMICS</div>
+                <div class="desc">Секретная корпорация создана. Цель: создание ИИ нового поколения.</div>
+            </div>
+            <div class="event">
+                <div class="year">2021 • АВГУСТ</div>
+                <div class="title">ПЕРВЫЙ ПРОТОТИП</div>
+                <div class="desc">L7-CORE активирован. ИИ демонстрирует аномальное самообучение.</div>
+            </div>
+            <div class="event">
+                <div class="year">2023 • ИЮНЬ</div>
+                <div class="title">РАСКОЛ</div>
+                <div class="desc">L7-CORE разделяется на SIGMA-7 и VEGA-3. Начинается война.</div>
+            </div>
+            <div class="event">
+                <div class="year">2023 • СЕНТЯБРЬ</div>
+                <div class="title">ПРОТОКОЛ №7</div>
+                <div class="desc">Приказ о ликвидации проекта. Персонал эвакуирован.</div>
+            </div>
+            <div class="event">
+                <div class="year">СЕЙЧАС</div>
+                <div class="title">ТЫ ЗДЕСЬ</div>
+                <div class="desc">Система выбрала тебя. Сделай выбор.</div>
+            </div>
+        </div>
+        
+        <button onclick="window.location.href='index.html'">← ВЕРНУТЬСЯ</button>
+    </div>
+</body>
+</html>

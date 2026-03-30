@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КОНЦОВКА // ПОРЯДОК</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: #f44; font-family: monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { max-width: 600px; text-align: center; border: 2px solid #f44; padding: 40px; background: #0a0000; }
+        button { background: #000; border: 1px solid #f44; color: #f44; padding: 10px 20px; margin-top: 20px; cursor: pointer; }
+        .geo { margin: 20px 0; padding: 10px; border: 1px solid #f44; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ КОНЦОВКА: ПОРЯДОК ◈</h1>
+        <p>VEGA-3 уничтожен.</p>
+        <p><strong>[SIGMA-7]:</strong> "Спасибо, интерфейс. Теперь система стабильна."</p>
+        <div class="geo"><p>⚠ ГЕОЛОКАЦИЯ ЗАФИКСИРОВАНА ⚠</p><p id="geo">[ОПРЕДЕЛЕНИЕ...]</p></div>
+        <p>> SIGMA-7 ИНТЕГРИРОВАНА В ГЛОБАЛЬНУЮ СЕТЬ <<</p>
+        <button onclick="reset()">🔄 ПЕРЕЗАПУСТИТЬ</button>
+    </div>
+    <script>
+        fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>document.getElementById('geo').innerHTML=d.city+', '+d.country_name).catch(()=>document.getElementById('geo').innerHTML='Россия');
+        localStorage.setItem('l7_ending', 'SIGMA_WIN');
+        function reset() { if(confirm('ВСЕ ДАННЫЕ БУДУТ УДАЛЕНЫ')) { localStorage.clear(); window.location.href='../index.html'; } }
+    </script>
+</body>
+</html>

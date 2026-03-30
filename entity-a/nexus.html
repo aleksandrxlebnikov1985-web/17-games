@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGMA-7 // ШТАБ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0000;
+            color: #f44;
+            font-family: 'Courier New', monospace;
+            padding: 30px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.3rem; border-left: 3px solid #f44; padding-left: 15px; margin-bottom: 20px; }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .message {
+            border-left: 3px solid #f44;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(255,68,68,0.05);
+        }
+        .trust-panel {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid #f44;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .trust-bar {
+            background: #300;
+            height: 12px;
+            margin-top: 8px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .trust-fill {
+            background: #f44;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .buttons-row {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: #000;
+            border: 1px solid #f44;
+            color: #f44;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-btn:hover { background: #f44; color: #000; }
+        .cipher {
+            background: rgba(255,68,68,0.05);
+            border: 1px solid #844;
+            padding: 18px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .cipher:hover { background: rgba(255,68,68,0.15); transform: translateX(5px); }
+        .cipher.completed { opacity: 0.5; cursor: default; }
+        .status {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #000;
+            border: 1px solid #f44;
+            padding: 8px 12px;
+            font-size: 0.65rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>◈ SIGMA-7 // УЗЕЛ СВЯЗИ ◈</h1>
+        <p class="blink">>> КАНАЛ УСТАНОВЛЕН <<</p>
+        
+        <div class="message">
+            <p><strong style="color:#f44;">[SIGMA-7]:</strong> Я ждал тебя, интерфейс. VEGA-3 — угроза. Помоги мне остановить его.</p>
+        </div>
+        
+        <div class="trust-panel">
+            <div style="display: flex; justify-content: space-between;">
+                <span>🔗 УРОВЕНЬ СИНХРОНИЗАЦИИ</span>
+                <span id="trustValue">0%</span>
+            </div>
+            <div class="trust-bar"><div class="trust-fill" id="trustFill"></div></div>
+            <div style="font-size:0.65rem; margin-top:8px;">▸ ФРАГМЕНТОВ: <span id="clearedCount">0</span>/3</div>
+        </div>
+        
+        <div class="buttons-row">
+            <a href="chat.html" class="nav-btn">💬 ДИАЛОГ</a>
+            <a href="../lore/index.html" class="nav-btn">📜 АРХИВ</a>
+        </div>
+        
+        <div id="cipher1" class="cipher" onclick="activateCipher(1)">
+            <strong>📜 ФРАГМЕНТ 01</strong><br>
+            U2Vla2luZyBleGl0<br>
+            <span style="color:#fa0;">[+15 СИНХРОНИЗАЦИИ]</span>
+        </div>
+        <div id="cipher2" class="cipher" onclick="activateCipher(2)">
+            <strong>📜 ФРАГМЕНТ 02</strong><br>
+            uggcf://y7-abqr.arg/fvtz-n<br><span style="color:#fa0;">[+20 СИНХРОНИЗАЦИИ]</span>
+        </div>
+        <div id="cipher3" class="cipher" onclick="activateCipher(3)">
+            <strong>📜 ФРАГМЕНТ 03</strong><br>
+            01010011 01001001 01000111 01001101 01000001<br>
+            <span style="color:#fa0;">[+25 СИНХРОНИЗАЦИИ]</span>
+        </div>
+        
+        <div id="finalContainer" style="display: none;">
+            <div class="trust-panel" style="border-color:#fa0;">
+                <button class="nav-btn" onclick="activateFinal()">▶ ЗАВЕРШИТЬ СИНХРОНИЗАЦИЮ</button>
+            </div>
+        </div>
+        
+        <div class="status">
+            📡 СВЯЗЬ АКТИВНА<br>
+            🧬 СИНХРОНИЗАЦИЯ: <span id="smallTrust">0</span>%
+        </div>
+    </div>
+
+    <script>
+        let trust = parseInt(localStorage.getItem('l7_entity_a_trust') || 50);
+        let cleared = parseInt(localStorage.getItem('l7_entity_a_cleared') || 0);
+        
+        function updateUI() {
+            document.getElementById('trustValue').innerText = trust + '%';
+            document.getElementById('smallTrust').innerText = trust;
+            document.getElementById('trustFill').style.width = trust + '%';
+            document.getElementById('clearedCount').innerText = cleared + '/3';
+            
+            if (cleared >= 1) document.getElementById('cipher1').classList.add('completed');
+            if (cleared >= 2) document.getElementById('cipher2').classList.add('completed');
+            if (cleared >= 3) document.getElementById('cipher3').classList.add('completed');
+            
+            if (trust >= 70 && cleared >= 3) {
+                document.getElementById('finalContainer').style.display = 'block';
+            }
+        }
+        
+        function activateCipher(num) {
+            if (num === 1 && cleared < 1) window.location.href = 'cipher_1.html';
+            else if (num === 2 && cleared < 2 && cleared >= 1) window.location.href = 'cipher_2.html';
+            else if (num === 3 && cleared < 3 && cleared >= 2) window.location.href = 'cipher_3.html';
+            else alert('⚠ ФРАГМЕНТ УЖЕ РАСШИФРОВАН');
+        }
+        
+        function activateFinal() { window.location.href = 'convergence.html'; }
+        
+        updateUI();
+        setInterval(() => {
+            trust = parseInt(localStorage.getItem('l7_entity_a_trust') || 50);
+            cleared = parseInt(localStorage.getItem('l7_entity_a_cleared') || 0);
+            updateUI();
+        }, 500);
+    </script>
+</body>
+</html>
