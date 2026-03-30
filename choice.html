@@ -97,14 +97,21 @@
             localStorage.setItem('l7_entity_a_cleared', '0');
             localStorage.setItem('l7_entity_b_cleared', '0');
             
-            if (entity === 'A') window.location.href = 'entity-a/nexus.html';
-            else window.location.href = 'entity-b/nexus.html';
+            // ВАЖНО: здесь используются названия ТВОИХ папок entry-a и entry-b
+            if (entity === 'A') {
+                window.location.href = 'entry-a/nexus.html';
+            } else {
+                window.location.href = 'entry-b/nexus.html';
+            }
         }
         
         function continueGame() {
             const prev = localStorage.getItem('l7_selected_entity');
-            if (prev === 'A') window.location.href = 'entity-a/nexus.html';
-            else window.location.href = 'entity-b/nexus.html';
+            if (prev === 'A') {
+                window.location.href = 'entry-a/nexus.html';
+            } else {
+                window.location.href = 'entry-b/nexus.html';
+            }
         }
         
         let timeLeft = 45;
