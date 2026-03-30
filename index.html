@@ -109,10 +109,11 @@
     <script>
         function checkKey() {
             const key = document.getElementById('key').value;
-            if (key === 'L7:v0'⠵⠟⠞⠞⠞⠵⠺⠞⠟⠵⠵⠵⠟⠞⠺⠵⠺⠟⠟⠞⠟⠟⠞⠵⠟key === 'L7:DUAL') {
+            // Ключ доступа: L7:v0 (работает и в верхнем и в нижнем регистре)
+            if (key === 'L7:v0'⠟⠵⠵⠟⠵⠵⠟⠺⠺⠟⠞⠞⠟⠺⠟⠞⠞⠟⠞key === 'l7:v0') {
                 localStorage.setItem('l7_access_granted', Date.now());
-                localStorage.setItem('l7_entity_a_trust', '50');
-                localStorage.setItem('l7_entity_b_trust', '50');localStorage.setItem('l7_entity_a_cleared', '0');
+                localStorage.setItem('l7_entity_a_trust', '50');localStorage.setItem('l7_entity_b_trust', '50');
+                localStorage.setItem('l7_entity_a_cleared', '0');
                 localStorage.setItem('l7_entity_b_cleared', '0');
                 window.location.href = 'choice.html';
             } else {
